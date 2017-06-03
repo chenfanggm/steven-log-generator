@@ -1,2 +1,2 @@
-# steven-express-starter-kit
-Steven's Express Starter Kit
+# steven-log-generator
+An Express.js based log generator
