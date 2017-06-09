@@ -4,7 +4,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const methodOverride = require('method-override')
-const logger = require('morgan')
 const cors = require('cors')
 const validator = require('express-validator')
 const compression = require('compression')
@@ -13,8 +12,8 @@ const httpStatus = require('http-status')
 // const mongoose = require('mongoose')
 // const util = require('util')
 const debug = require('debug')('app:server')
-// const expressWinston = require('express-winston')
-// const winstonInstance = require('./utils/winston')
+const expressWinston = require('express-winston')
+const winstonInstance = require('./utils/winston')
 const errorHandler = require('./middlewares/errorHandler')
 const APIError = require('./utils/APIError')
 const routes = require('./routes')
@@ -40,7 +39,6 @@ if (config.env === 'development') {
 */
 
 debug('Init middleware...')
-if (config.env === 'development') { app.use(logger('dev')) }
 app.use(compression())
 app.use(cors(config.cors))
 app.use(bodyParser.json())
@@ -50,7 +48,7 @@ app.use(cookieParser())
 app.use(methodOverride())
 app.use(helmet())
 
-/* if (config.env === 'development') {
+if (config.env === 'development') {
   expressWinston.requestWhitelist.push('body')
   expressWinston.responseWhitelist.push('body')
   app.use(expressWinston.logger({
@@ -59,7 +57,7 @@ app.use(helmet())
     meta: true,
     colorize: true
   }))
-} */
+}
 
 // routes
 app.use('/api/v1', routes)

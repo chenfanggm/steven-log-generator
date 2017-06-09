@@ -75,13 +75,13 @@
     "jsonwebtoken": "^7.1.9",
     "method-override": "^2.3.7",
     "moment": "^2.16.0",
-    "mongoose": "^4.6.8",
+    "mongoose": "^4.10.5",
     "morgan": "^1.7.0",
     "winston": "^2.3.0"
   },
   "devDependencies": {
     "async": "^2.4.1",
-    "chai": "^4.0.1",
+    "chai": "^4.0.2",
     "eslint": "^3.10.2",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
