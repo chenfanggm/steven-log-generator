@@ -52,7 +52,8 @@ var config = {
   // Logger Configuration
   // ----------------------------------
   log: {
-    level: "debug",
+    path: './logs/server-log',
+    level: process.env.NODE_ENV === 'development' ? "debug" : 'info',
     colorize: true
   },
   // ----------------------------------

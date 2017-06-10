@@ -13,30 +13,45 @@ const httpStatus = require('http-status')
 // const util = require('util')
 const debug = require('debug')('app:server')
 const expressWinston = require('express-winston')
-const winstonInstance = require('./utils/winston')
+const winston = require('./utils/winston')
 const errorHandler = require('./middlewares/errorHandler')
 const APIError = require('./utils/APIError')
 const routes = require('./routes')
 const config = require('./config')
 
-const app = express()
+// ========================================================
+// Init
+// ========================================================
+const __DEV__ = config.env === 'development'
+const __TEST__ = config.env === 'test'
+
+const initEnvironment = () => {
+  const fs = require('fs')
+  const logDir = './logs'
+  if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir)
+  }
+}
+initEnvironment()
 
 // ========================================================
-// Middleware
+// Express
 // ========================================================
+const app = express()
+
 /*
-debug('Init mongoose...')
-mongoose.Promise = require('bluebird')
-mongoose.connect(config.mongo.uri, { server: { socketOptions: { keepAlive: 1 } } })
-mongoose.connection.on('error', function () {
-  throw new Error('Failed to connect to database:' + config.mongo.uri)
-})
-if (config.env === 'development') {
-  mongoose.set('debug', function (collectionName, method, query, doc) {
-    debug(collectionName + '.' + method, util.inspect(query, false, 20), doc)
-  })
-}
-*/
+ debug('Init mongoose...')
+ mongoose.Promise = require('bluebird')
+ mongoose.connect(config.mongo.uri, { server: { socketOptions: { keepAlive: 1 } } })
+ mongoose.connection.on('error', function () {
+ throw new Error('Failed to connect to database:' + config.mongo.uri)
+ })
+ if (config.env === 'development') {
+ mongoose.set('debug', function (collectionName, method, query, doc) {
+ debug(collectionName + '.' + method, util.inspect(query, false, 20), doc)
+ })
+ }
+ */
 
 debug('Init middleware...')
 app.use(compression())
@@ -48,16 +63,15 @@ app.use(cookieParser())
 app.use(methodOverride())
 app.use(helmet())
 
-if (config.env === 'development') {
-  expressWinston.requestWhitelist.push('body')
-  expressWinston.responseWhitelist.push('body')
-  app.use(expressWinston.logger({
-    winstonInstance: winstonInstance,
-    msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
-    meta: true,
-    colorize: true
-  }))
-}
+app.use(winston.reqPreprocess)
+app.use(expressWinston.logger({
+  winstonInstance: winston.instance,
+  msg: '[{{req.requestStartTime}}] HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
+  level: __DEV__ ? 'debug' : 'info',
+  meta: true,
+  colorize: false,
+  dynamicMeta: winston.dynamicMeta
+}))
 
 // routes
 app.use('/api/v1', routes)
@@ -81,11 +95,13 @@ app.use(function (err, req, res, next) {
 })
 
 // log error
-/* if (config.env !== 'test') {
+if (!__TEST__) {
   app.use(expressWinston.errorLogger({
-    winstonInstance: winstonInstance
+    winstonInstance: winston.instance,
+    msg: 'HTTP {{req.method}} {{req.url}} {{err.status}} {{err.message}}',
+    dynamicMeta: winston.dynamicMeta
   }))
-} */
+}
 
 // error handler
 app.use(errorHandler())
