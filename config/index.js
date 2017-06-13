@@ -49,6 +49,7 @@ var config = {
     secret: 'express_starter_secret'
   },
   // ----------------------------------
+
   // Logger Configuration
   // ----------------------------------
   log: {

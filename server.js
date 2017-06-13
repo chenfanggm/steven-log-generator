@@ -54,16 +54,16 @@ const app = express()
  */
 
 debug('Init middleware...')
-app.use(compression())
+/*app.use(compression())
 app.use(cors(config.cors))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(validator())
 app.use(cookieParser())
 app.use(methodOverride())
-app.use(helmet())
+app.use(helmet())*/
 
-app.use(winston.reqPreprocess)
+/*app.use(winston.reqPreprocess)
 app.use(expressWinston.logger({
   winstonInstance: winston.instance,
   msg: '[{{req.requestStartTime}}] HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
@@ -71,14 +71,14 @@ app.use(expressWinston.logger({
   meta: true,
   colorize: false,
   dynamicMeta: winston.dynamicMeta
-}))
+}))*/
 
 // routes
 app.use('/api/v1', routes)
 // static
-app.use(express.static('dist'))
+// app.use(express.static('dist'))
 // 404
-app.use('/', function (req, res, next) {
+/*app.use('/', function (req, res, next) {
   next(new APIError('Method Not Found', httpStatus.NOT_FOUND, true))
 })
 
@@ -92,19 +92,18 @@ app.use(function (err, req, res, next) {
     return next(new APIError(err.message, err.status, err.isPublic))
   }
   return next(err)
-})
+})*/
 
 // log error
-if (!__TEST__) {
+/*if (!__TEST__) {
   app.use(expressWinston.errorLogger({
     winstonInstance: winston.instance,
     msg: 'HTTP {{req.method}} {{req.url}} {{err.status}} {{err.message}}',
     dynamicMeta: winston.dynamicMeta
   }))
-}
+}*/
 
 // error handler
-app.use(errorHandler())
+// app.use(errorHandler())
 
 module.exports = app
-
