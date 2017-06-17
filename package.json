@@ -30,7 +30,7 @@
       }
     },
     "start": {
-      "command": "nodemon bin/start.js",
+      "command": "node bin/start.js",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
@@ -75,7 +75,7 @@
     "jsonwebtoken": "^7.1.9",
     "method-override": "^2.3.7",
     "moment": "^2.16.0",
-    "mongoose": "^4.10.5",
+    "mongoose": "^4.10.6",
     "morgan": "^1.7.0",
     "winston": "^2.3.0",
     "winston-daily-rotate-file": "^1.4.6"
@@ -83,11 +83,11 @@
   "devDependencies": {
     "async": "^2.4.1",
     "chai": "^4.0.2",
-    "eslint": "^3.10.2",
+    "eslint": "^4.0.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.3.0",
-    "eslint-plugin-html": "^2.0.3",
+    "eslint-loader": "^1.8.0",
+    "eslint-plugin-html": "^3.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-node": "^5.0.0",
     "eslint-plugin-promise": "^3.4.0",
